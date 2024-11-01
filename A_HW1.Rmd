@@ -1,6 +1,6 @@
 ---
 title: "GroupA_HW1"
-author: "D. Rosa, S. Cattonar, L.Ricatti, A. Valle"
+author: "S. Cattonar, L.Ricatti, M. Rizwan, D. Rosa, A. Valle"
 output: 
   pdf_document:
     toc: true
@@ -12,11 +12,10 @@ date: "2024-11-05"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
 ## CS - Chapter 1 
 
 ### Ex 1.1
-
+(Luca)
 *Exponential random variable, X $\geq$ 0, has p.d.f. f(x) = $\lambda \exp(-\lambda x)$.*    
   
 *1. Find the c.d.f. and the quantile function for X.*  
@@ -62,7 +61,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ### Ex 1.6
-
+(Luca)
 *Let X and Y be non-independent random variables, such that var(X) = $\sigma_x^2$, var(Y) = $\sigma_y^2$ and cov(X,Y) = $\sigma_{xy}^2$. Using the result from Section 1.6.2, find var(X + Y) and var(X - Y).*\
 \
 **Solution**
@@ -108,26 +107,33 @@ $\text{var}(X - Y) = \sigma_x^2 - 2\sigma_{xy}^2 + \sigma_y^2$\
 
 
 ### Ex 3.5
+*Consider solving the matrix equation Ax = y for x, where y is a known n vector and A is a known n × n matrix...*
 
 **Solution**
 
-**Comments on the solution:**
 
 
 ### Ex 3.6
-
+*The empirical cumulative distribution function for a set of measurements {xi : i = 1, . . . n} is ...*
 **Solution**
 
-**Comments on the solution:**
 
 
 ## FSDS - Chapter 2
 
+### Ex 2.8
+(Luca)
+*Each time a person shops at a grocery store, the event of catching a cold or some other virus from another shopper is independent from visit to visit and has a constant probability over the year, equal to 0.01. (a) In 100 trips to this store over the course of a year, the probability of catching a virus while shopping there is 100(0.01) = 1.0. What is wrong with this reasoning? (b) Find the correct probability in (a).*
+
+**Solution**
+
+Add comments to the solution.
+
+
+
 ### Ex 2.16
-
-*Each day a hospital records the number of people who come to the emergency room for treatment.*
-
-*(a) In the first week, the observations from Sunday to Saturday are 10, 8, 14, 7, 21, 44, 60. Do you think that the Poisson distribution might describe the random variability of this phenomenon adequately. Why or why not?*
+(Luca)
+*Each day a hospital records the number of people who come to the emergency room for treatment.(a) In the first week, the observations from Sunday to Saturday are 10, 8, 14, 7, 21, 44, 60. Do you think that the Poisson distribution might describe the random variability of this phenomenon adequately. Why or why not?*
 
 **Solution**
 To assess whether the Poisson distribution might adequately describe the random variability of emergency room visits, we'll examine the data and compare it to properties of the Poisson distribution.
@@ -232,7 +238,7 @@ legend("topright", legend = c("Observed", "Theoretical Poisson"),
 
 
 ### Ex 2.21
-
+(Luca)
 *Plot the gamma distribution by fixing the shape parameter k = 3 and setting the scale parameter $\theta$ = 0.5, 1, 2, 3, 4, 5. What is the effect of increasing the scale parameter? (See also Exercise 2.48.)*
 
 **Solution**
@@ -280,92 +286,114 @@ legend("topright", legend = paste("theta =", theta), col = colors, lty = 1, cex 
      * The variance increases quadratically ($k\theta^2$)
    - This quadratic increase in variance relative to the mean explains the greater spread and variability we observe with larger $\theta$ values.
 
-### Ex 2.26
 
+### Ex 2.26
 Refer to Table 2.4 cross classifying happiness with family income.
 
 **Solution**
 
-First, let's recreate the table from the image:
+Add comments to the solution.
 
-```{r setup_table, echo=TRUE}
-# Create the joint distribution table
-joint_dist <- matrix(c(0.080, 0.198, 0.079,
-                       0.043, 0.254, 0.143,
-                       0.017, 0.105, 0.081), nrow = 3, byrow = TRUE)
 
-rownames(joint_dist) <- c("Below average", "Average", "Above average")
-colnames(joint_dist) <- c("Not too happy", "Pretty happy", "Very happy")
+### Ex 2.52
+The pdf $f$ of a $N(\mu, \sigma^2)$ distribution can be derived from the standard normal pdf $\phi$ shown in equation $(2.9)$. (a) Show that the normal cdf $F$ relates to the standard normal cdf $\Phi$ by $F(y) = \Phi[(y - \mu)/\sigma]$. (b) From (a), show that $f(y) = (1/\sigma)\phi[(y - \mu)/\sigma]$, and show this is equation $(2.8)$.
 
-# Display the table
-print(joint_dist)
-```
+**Solution**
 
-(a) Find and interpret the correlation using scores:
+Add comments to the solution.
 
-(i) (1, 2, 3) for each variable
 
-```{r correlation_i, echo=TRUE}
-# Assign scores
-income_scores <- 1:3
-happiness_scores <- 1:3
 
-# Calculate correlation
-corr_i <- cor(rep(income_scores, 3), rep(happiness_scores, each = 3), 
-              w = as.vector(joint_dist))
+### Ex 2.53
+*If $Y$ is a standard normal random variable, with cdf $\Phi$, what is the probability distribution of $X = \Phi(Y)$? Illustrate by randomly generating a million standard normal random variables, applying the cdf function $\Phi()$ to each, and plotting histograms of the (a) $y$ values, (b) $x$ values.*
 
-cat("Correlation (i):", round(corr_i, 4))
-```
+**Solution**
 
-Interpretation: The correlation of `r round(corr_i, 4)` indicates a weak positive relationship between family income and happiness when using the scores (1, 2, 3) for both variables.
+Add comments to the solution.
 
-(ii) (1, 2, 3) for family income and (1, 4, 5) for happiness
 
-```{r correlation_ii, echo=TRUE}
-# Assign new scores for happiness
-happiness_scores_ii <- c(1, 4, 5)
+### Ex 2.70
+*The beta distribution is a probability distribution over (0, 1) that is often used in applications for which the random variable is a proportion. The beta pdf is ...*
 
-# Calculate correlation
-corr_ii <- cor(rep(income_scores, 3), rep(happiness_scores_ii, each = 3), 
-               w = as.vector(joint_dist))
+**Solution**
 
-cat("Correlation (ii):", round(corr_ii, 4))
-```
+Add comments to the solution.
 
-Interpretation: The correlation of `r round(corr_ii, 4)` still indicates a weak positive relationship, but it's slightly stronger than in (i). This change is due to the different scoring of the happiness variable, which now emphasizes the difference between "Pretty happy" and "Very happy".
 
-(b) Construct the joint distribution that has these marginal distributions and exhibits independence of X and Y.
 
-To construct a joint distribution with independence, we multiply the marginal probabilities:
+## FSDS - Chapter 3 
 
-```{r independent_dist, echo=TRUE}
-# Calculate marginal distributions
-income_marginal <- rowSums(joint_dist)
-happiness_marginal <- colSums(joint_dist)
+### Ex 3.18
+*Sunshine City, which attracts primarily retired people, has 90,000 residents with a mean age of 72 years and a standard deviation of 12 years. The age distribution is skewed to the left. A random sample of 100 residents of Sunshine City has y = 70 and s = 11...*
+**Solution**
 
-# Create independent joint distribution
-independent_dist <- outer(income_marginal, happiness_marginal)
+Add comments to the solution.
 
-# Display the independent joint distribution
-print(round(independent_dist, 4))
 
-# Verify that the marginals are the same
-cat("Original Income Marginal:", income_marginal, "\n")
-cat("Independent Income Marginal:", rowSums(independent_dist), "\n\n")
-cat("Original Happiness Marginal:", happiness_marginal, "\n")
-cat("Independent Happiness Marginal:", colSums(independent_dist), "\n")
-```
+### Ex 3.28
+*A survey is planned to estimate the population proportion $\pi$ supporting more government action to address global warming. For a simple random sample, if $\pi$ may be near 0.50, how large should n be so that the standard error of the sample proportion is 0.04?*
+**Solution**
 
-This constructed joint distribution maintains the original marginal distributions while exhibiting independence between family income and happiness. You can verify that multiplying any row marginal by any column marginal gives the corresponding cell probability in the independent distribution.
+Add comments to the solution.
 
-**Comments on the solution:**
 
-1. The correlation changes based on the scoring system used, highlighting the importance of how we assign numerical values to categorical data.
+### Ex 3.24 (use R)
+*Construct a population distribution that is plausible for Y = number of alcoholic drinks in the past day. Use the following steps:*
 
-2. Both correlation calculations show a weak positive relationship between family income and happiness, suggesting that as income increases, there's a slight tendency for reported happiness to increase as well.
+**Solution**
 
-3. The independent joint distribution we constructed shows what the probabilities would look like if there were no relationship between income and happiness. Comparing this to the original distribution can help us understand the actual degree of association between these variables.
+Add comments to the solution.
 
-4. In reality, the variables are not independent (as seen from the non-zero correlations), but constructing the independent distribution provides a useful baseline for comparison.
 
-5. This exercise demonstrates how we can analyze and interpret categorical data using correlation and probability distributions, providing insights into the relationship between socioeconomic factors and subjective well-being.
+## FSDS - Chapter 4 
+
+### Ex 4.14
+*Using the Students data file, for the corresponding population, construct a 95% confidence interval (a) for the mean weekly number of hours spent watching TV; (b) to compare females and males on the mean weekly number of hours spent watching TV. In each case, state assumptions, including the practical importance of each, and interpret results.*
+
+**Solution**
+
+Add comments to the solution.
+
+
+### Ex 4.16
+*The Substance data file at the book’s website shows a contingency table formed from a survey that asked a sample of high school students whether they have ever used alcohol, cigarettes, and marijuana. Construct a 95% Wald confidence interval to compare those who have used or not used alcohol on whether they have used marijuana, using (a) formula (4.13); (b) software. State assumptions for your analysis, and interpret results.*
+
+**Solution**
+
+Add comments to the solution.
+
+
+
+### Ex 4.48
+*For a simple random sample of $n$ subjects, explain why it is about 95% likely that the sample proportion has error no more than $1/\sqrt{n}$ in estimating the population proportion. (Hint: To show this "$1/\sqrt{n}$ rule," find two standard errors when $\pi = 0.50$, and explain how this compares to two standard errors at other values of $\pi$.) Using this result, show that $n = 1/M^2$ is a safe sample size for estimating a proportion to within $M$ with 95% confidence.*
+
+**Solution**
+
+Add comments to the solution.
+
+
+
+## FSDS - Chapter 5 
+
+### Ex 5.2
+*When a government does not have enough money to pay for the services that it provides, it can raise taxes or it can reduce services. When the Florida Poll asked a random sample of 1200 Floridians which they preferred, 52% (624 of the 1200) chose raise taxes and 48% chose reduce services. Let $\pi$ denote the population proportion of Floridians who would choose raising taxes. Analyze whether this is a minority of the population ($\pi$ < 0.50) or a majority ($\pi$ > 0.50) by testing H0 : $\pi$ = 0.50 against Ha : $\pi$ $\neq$ 0.50. Interpret the P -value. Is it appropriate to “accept H0 ? Why or why not?*
+**Solution**
+
+Add comments to the solution.
+
+
+
+### Ex 5.12
+*The example in Section 3.1.4 described an experiment to estimate the mean sales with a proposed menu for a new restaurant. In a revised experiment to compare two menus, on Tuesday of the opening week the owner gives customers menu A and on Wednesday she gives them menu B. The bills average $22.30 for the 43 customers on Tuesday (s = 6.88) and $25.91 for the 50 customers on Wednesday (s = 8.01). Under the strong assumption that her customers each night are comparable to a random sample from the conceptual population of potential customers, show how to compare the mean sales for the two menus based on (a) the P -value of a significance test, (b) a 95% confidence interval. Which is more informative, and why? (When used in an experiment to compare two treatments to determine which works better, a two-sample test is often called an A/B test.).*
+
+**Solution**
+
+Add comments to the solution.
+
+
+
+### Ex 5.50
+*A random sample of size 40 has y = 120. The P -value for testing H0: $\mu$ = 100 against H : $\mu$ $\neq$ 100 is 0.057. Explain what is incorrect about each of the following interpretations of this P-value, and provide a proper interpretation.*
+**Solution**
+
+Add comments to the solution.
