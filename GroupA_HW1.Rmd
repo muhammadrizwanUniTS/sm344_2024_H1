@@ -1,0 +1,371 @@
+---
+title: "GroupA_HW1"
+author: "D. Rosa, S. Cattonar, L.Ricatti, A. Valle"
+output: 
+  pdf_document:
+    toc: true
+    toc_depth: 3
+date: "2024-11-05"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## CS - Chapter 1 
+
+### Ex 1.1
+
+*Exponential random variable, X $\geq$ 0, has p.d.f. f(x) = $\lambda \exp(-\lambda x)$.*    
+  
+*1. Find the c.d.f. and the quantile function for X.*  
+*2. Find Pr(X < $\lambda$) and the median of X.*  
+*3. Find the mean and variance of X.*  
+\
+**Solution**
+
+1. C.D.F. and Quantile Function:
+
+   The cumulative distribution function (c.d.f.) F(x) is:
+   $$ F(x) = \int_0^x \lambda e^{-\lambda t} dt = 1 - e^{-\lambda x}, \quad x \geq 0 $$
+
+   The quantile function Q(p) is the inverse of F(x):
+   $$ Q(p) = -\frac{1}{\lambda} \ln(1-p), \quad 0 \leq p < 1 $$
+
+2. Pr(X < \(\lambda\)) and Median:
+
+   Pr(X < \(\lambda\)) = F(\(\lambda\)) = \(1 - e^{-\lambda\lambda} = 1 - e^{-1} \approx 0.6321\)
+
+   For the median, we solve F(x) = 0.5:
+   $$ 1 - e^{-\lambda x} = 0.5 $$
+   $$ x = -\frac{1}{\lambda} \ln(0.5) = \frac{\ln(2)}{\lambda} $$
+
+3. Mean and Variance:
+
+   Mean: E[X] = \(\int_0^\infty x \lambda e^{-\lambda x} dx = \frac{1}{\lambda}\)
+
+   Variance: Var(X) = E[X²] - (E[X])² = \(\frac{2}{\lambda^2} - (\frac{1}{\lambda})^2 = \frac{1}{\lambda^2}\)
+
+**Comments on the solution:**
+
+1. The exponential distribution is characterized by its rate parameter \(\lambda\), which determines both its shape and scale.
+
+2. Interestingly, Pr(X < \(\lambda\)) is always approximately 0.6321, regardless of the value of \(\lambda\). This is a unique property of the exponential distribution.
+
+3. The median of the distribution is \(\frac{\ln(2)}{\lambda}\), which is always less than the mean (\(\frac{1}{\lambda}\)) due to the distribution's right-skewness.
+
+4. The mean and variance are both functions of \(\lambda\). As \(\lambda\) increases, both the mean and variance decrease, indicating that larger values of \(\lambda\) result in the distribution being more concentrated near zero.
+
+5. The standard deviation of the distribution is equal to its mean, which is a distinctive feature of the exponential distribution.
+
+
+
+### Ex 1.6
+
+*Let X and Y be non-independent random variables, such that var(X) = $\sigma_x^2$, var(Y) = $\sigma_y^2$ and cov(X,Y) = $\sigma_{xy}^2$. Using the result from Section 1.6.2, find var(X + Y) and var(X - Y).*\
+\
+**Solution**
+
+Using the formula for linear transformations of random vectors from Section 1.6.2:
+
+$\mathbf{AX} \sim N(\mathbf{A}\boldsymbol{\mu}, \mathbf{A\Sigma A^T})$
+
+1. Define a random vector and its covariance matrix:
+
+   $\mathbf{X} = \begin{pmatrix} X \\ Y \end{pmatrix}$
+
+   $\boldsymbol{\Sigma} = \begin{pmatrix} \sigma_x^2 & \sigma_{xy}^2 \\ \sigma_{xy}^2 & \sigma_y^2 \end{pmatrix}$
+
+2. For var(X + Y):
+   Let $\mathbf{A} = \begin{pmatrix} 1 & 1 \end{pmatrix}$
+
+   $\text{var}(X + Y) = \mathbf{A\Sigma A^T} = \begin{pmatrix} 1 & 1 \end{pmatrix} \begin{pmatrix} \sigma_x^2 & \sigma_{xy}^2 \\ \sigma_{xy}^2 & \sigma_y^2 \end{pmatrix} \begin{pmatrix} 1 \\ 1 \end{pmatrix}$
+
+   $= \begin{pmatrix} 1 & 1 \end{pmatrix} \begin{pmatrix} \sigma_x^2 + \sigma_{xy}^2 \\ \sigma_{xy}^2 + \sigma_y^2 \end{pmatrix} = \sigma_x^2 + 2\sigma_{xy}^2 + \sigma_y^2$
+
+3. For var(X - Y):
+   Let $\mathbf{A} = \begin{pmatrix} 1 & -1 \end{pmatrix}$
+
+   $\text{var}(X - Y) = \mathbf{A\Sigma A^T} = \begin{pmatrix} 1 & -1 \end{pmatrix} \begin{pmatrix} \sigma_x^2 & \sigma_{xy}^2 \\ \sigma_{xy}^2 & \sigma_y^2 \end{pmatrix} \begin{pmatrix} 1 \\ -1 \end{pmatrix}$
+
+   $= \begin{pmatrix} 1 & -1 \end{pmatrix} \begin{pmatrix} \sigma_x^2 - \sigma_{xy}^2 \\ -(\sigma_{xy}^2 - \sigma_y^2) \end{pmatrix} = \sigma_x^2 - 2\sigma_{xy}^2 + \sigma_y^2$
+
+Therefore:\
+\
+$\text{var}(X + Y) = \sigma_x^2 + 2\sigma_{xy}^2 + \sigma_y^2$\
+\
+\
+$\text{var}(X - Y) = \sigma_x^2 - 2\sigma_{xy}^2 + \sigma_y^2$\
+\
+**Comments on the solution:**
+
+1. For the sum (X + Y), the covariance term is added twice, potentially increasing the overall variance if X and Y are positively correlated.
+
+2. For the difference (X - Y), the covariance term is subtracted twice, potentially decreasing the overall variance if X and Y are positively correlated.
+
+3. If X and Y are independent (i.e., $\sigma_{xy}^2 = 0$), the variances of their sum and difference would both simplify to $\sigma_x^2 + \sigma_y^2$.
+
+
+### Ex 3.5
+
+**Solution**
+
+**Comments on the solution:**
+
+
+### Ex 3.6
+
+**Solution**
+
+**Comments on the solution:**
+
+
+## FSDS - Chapter 2
+
+### Ex 2.16
+
+*Each day a hospital records the number of people who come to the emergency room for treatment.*
+
+*(a) In the first week, the observations from Sunday to Saturday are 10, 8, 14, 7, 21, 44, 60. Do you think that the Poisson distribution might describe the random variability of this phenomenon adequately. Why or why not?*
+
+**Solution**
+To assess whether the Poisson distribution might adequately describe the random variability of emergency room visits, we'll examine the data and compare it to properties of the Poisson distribution.
+
+
+#### a)
+```{r poisson_analysis, echo=TRUE}
+# Data
+er_visits <- c(10, 8, 14, 7, 21, 44, 60)
+days <- c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
+
+# Basic statistics
+mean_visits <- mean(er_visits)
+var_visits <- var(er_visits)
+
+# Print results
+cat("Mean of visits:", round(mean_visits, 2), "\n")
+cat("Variance of visits:", round(var_visits, 2), "\n")
+
+# Plot the data
+barplot(er_visits, names.arg = days, main = "Emergency Room Visits by Day",
+        ylab = "Number of Visits", col = "skyblue")
+
+# Add a line for the mean
+abline(h = mean_visits, col = "red", lwd = 2)
+legend("topleft", legend = "Mean", col = "red", lwd = 2)
+```
+
+
+1. The Poisson distribution has the property that its mean and variance are equal. In our data:
+   - Mean: `r mean_visits`
+   - Variance: `r var_visits`
+   The large difference between these values suggests that the Poisson distribution may not be appropriate.
+
+2. The bar plot shows a clear increasing trend throughout the week, with a sharp increase on Friday and Saturday. This pattern is not consistent with the Poisson distribution, which assumes a constant rate of events.
+
+3. The Poisson distribution assumes:
+   - Events occur independently
+   - The average rate of occurrences is constant
+
+   In this case, the number of ER visits doesn't satisfy these assumptions:
+   - There may be dependencies (e.g., a local event affecting multiple people)
+   - The rate clearly varies by day of the week
+
+4. The data shows overdispersion (variance much larger than the mean), which is not characteristic of the Poisson distribution.
+
+Given these observations, we can conclude that the Poisson distribution does not adequately describe the random variability of emergency room visits in this hospital. A more complex model that accounts for day-of-week effects and overdispersion (such as a negative binomial distribution or a time series model) would likely be more appropriate.
+
+#### b)
+
+**Solution**
+
+Yes, we would expect the Poisson distribution to better describe the number of weekly admissions to the hospital for a rare disease.
+
+1. **Rare events**: The Poisson distribution is particularly well-suited for modeling rare events. A rare disease, by definition, occurs infrequently.
+
+2. **Independence**: Admissions for a rare disease are more likely to be independent of each other, especially if the disease is not contagious.
+
+3. **Constant rate**: The occurrence of a rare disease is less likely to be affected by day-of-week patterns or other cyclical factors that we observed in general ER admissions. 
+
+4. **No simultaneous occurrences**: With rare diseases, the probability of two or more admissions occurring simultaneously is extremely low, which aligns with another assumption of the Poisson distribution.
+
+5. **Lower variance**: Rare events typically have a lower variance, which is more likely to be closer to the mean. 
+
+6. **Small numbers**: The Poisson distribution is often used to model count data when the counts are small, which is likely the case for weekly admissions of a rare disease.
+
+To illustrate this point, we can simulate weekly admissions for a hypothetical rare disease:
+
+```{r rare_disease_simulation, echo=TRUE}
+set.seed(123)
+weeks <- 52
+lambda <- 1.5  # Average 1.5 admissions per week for the rare disease
+rare_disease_admissions <- rpois(weeks, lambda)
+
+# Basic statistics
+mean_admissions <- mean(rare_disease_admissions)
+var_admissions <- var(rare_disease_admissions)
+
+# Print results
+cat("Mean of admissions:", round(mean_admissions, 2), "\n")
+cat("Variance of admissions:", round(var_admissions, 2), "\n")
+
+# Plot the data
+hist(rare_disease_admissions, breaks = seq(-0.5, max(rare_disease_admissions) + 0.5, by = 1),
+     main = "Histogram of Weekly Rare Disease Admissions",
+     xlab = "Number of Admissions", ylab = "Frequency")
+
+# Overlay Poisson distribution
+x <- 0:max(rare_disease_admissions)
+lines(x, dpois(x, lambda) * weeks, col = "red", type = "b", pch = 16)
+legend("topright", legend = c("Observed", "Theoretical Poisson"),
+       col = c("black", "red"), lty = 1, pch = c(22, 16))
+```
+
+**Comments on Solution:**
+
+1. The mean (`r round(mean_admissions, 2)`) and variance (`r round(var_admissions, 2)`) of the simulated data are much closer to each other, which is characteristic of the Poisson distribution.
+
+2. The histogram of simulated admissions closely follows the theoretical Poisson distribution (red line), indicating a good fit.
+
+3. The number of admissions per week is small and varies within a narrow range, which is typical for rare events and well-described by the Poisson distribution.
+
+
+### Ex 2.21
+
+*Plot the gamma distribution by fixing the shape parameter k = 3 and setting the scale parameter $\theta$ = 0.5, 1, 2, 3, 4, 5. What is the effect of increasing the scale parameter? (See also Exercise 2.48.)*
+
+**Solution**
+
+To visualize the effect of increasing the scale parameter on the gamma distribution, we'll create a plot showing multiple gamma distributions with a fixed shape parameter and varying scale parameters.
+
+```{r gamma_distribution_plot, echo=TRUE, fig.width=10, fig.height=6}
+# Set parameters
+k <- 3  # Shape parameter
+theta <- c(0.5, 1, 2, 3, 4, 5)  # Scale parameters
+colors <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00")
+
+# Create x values
+x <- seq(0, 30, length.out = 1000)
+
+# Plot
+plot(x, dgamma(x, shape = k, scale = theta[1]), type = "l", col = colors[1],
+     main = "Gamma Distribution with k = 3 and Varying theta",
+     xlab = "x", ylab = "Density", ylim = c(0, 0.5))
+
+# Add lines for other scale parameters
+for (i in 2:length(theta)) {
+  lines(x, dgamma(x, shape = k, scale = theta[i]), col = colors[i])
+}
+
+# Add legend
+legend("topright", legend = paste("theta =", theta), col = colors, lty = 1, cex = 0.8)
+```
+
+**Comments on the solution:**
+
+1. **Shape of the distribution**: As we increase the scale parameter $\theta$, we observe:
+
+   a. The peak of the distribution shifts to the right (towards larger x values).
+   b. The height of the peak decreases.
+   c. The distribution becomes wider.
+
+2. **Interpretation**: 
+   - A larger scale parameter $\theta$ indicates greater variability and a shift in the distribution.
+   - This can be explained by the relationship between the parameters of the gamma distribution:
+     * The mean of the gamma distribution is $\mu = k\theta$
+     * The variance is $\sigma^2 = k\theta^2$
+   - As $\theta$ increases:
+     * The mean increases linearly ($k\theta$)
+     * The variance increases quadratically ($k\theta^2$)
+   - This quadratic increase in variance relative to the mean explains the greater spread and variability we observe with larger $\theta$ values.
+
+### Ex 2.26
+
+Refer to Table 2.4 cross classifying happiness with family income.
+
+**Solution**
+
+First, let's recreate the table from the image:
+
+```{r setup_table, echo=TRUE}
+# Create the joint distribution table
+joint_dist <- matrix(c(0.080, 0.198, 0.079,
+                       0.043, 0.254, 0.143,
+                       0.017, 0.105, 0.081), nrow = 3, byrow = TRUE)
+
+rownames(joint_dist) <- c("Below average", "Average", "Above average")
+colnames(joint_dist) <- c("Not too happy", "Pretty happy", "Very happy")
+
+# Display the table
+print(joint_dist)
+```
+
+(a) Find and interpret the correlation using scores:
+
+(i) (1, 2, 3) for each variable
+
+```{r correlation_i, echo=TRUE}
+# Assign scores
+income_scores <- 1:3
+happiness_scores <- 1:3
+
+# Calculate correlation
+corr_i <- cor(rep(income_scores, 3), rep(happiness_scores, each = 3), 
+              w = as.vector(joint_dist))
+
+cat("Correlation (i):", round(corr_i, 4))
+```
+
+Interpretation: The correlation of `r round(corr_i, 4)` indicates a weak positive relationship between family income and happiness when using the scores (1, 2, 3) for both variables.
+
+(ii) (1, 2, 3) for family income and (1, 4, 5) for happiness
+
+```{r correlation_ii, echo=TRUE}
+# Assign new scores for happiness
+happiness_scores_ii <- c(1, 4, 5)
+
+# Calculate correlation
+corr_ii <- cor(rep(income_scores, 3), rep(happiness_scores_ii, each = 3), 
+               w = as.vector(joint_dist))
+
+cat("Correlation (ii):", round(corr_ii, 4))
+```
+
+Interpretation: The correlation of `r round(corr_ii, 4)` still indicates a weak positive relationship, but it's slightly stronger than in (i). This change is due to the different scoring of the happiness variable, which now emphasizes the difference between "Pretty happy" and "Very happy".
+
+(b) Construct the joint distribution that has these marginal distributions and exhibits independence of X and Y.
+
+To construct a joint distribution with independence, we multiply the marginal probabilities:
+
+```{r independent_dist, echo=TRUE}
+# Calculate marginal distributions
+income_marginal <- rowSums(joint_dist)
+happiness_marginal <- colSums(joint_dist)
+
+# Create independent joint distribution
+independent_dist <- outer(income_marginal, happiness_marginal)
+
+# Display the independent joint distribution
+print(round(independent_dist, 4))
+
+# Verify that the marginals are the same
+cat("Original Income Marginal:", income_marginal, "\n")
+cat("Independent Income Marginal:", rowSums(independent_dist), "\n\n")
+cat("Original Happiness Marginal:", happiness_marginal, "\n")
+cat("Independent Happiness Marginal:", colSums(independent_dist), "\n")
+```
+
+This constructed joint distribution maintains the original marginal distributions while exhibiting independence between family income and happiness. You can verify that multiplying any row marginal by any column marginal gives the corresponding cell probability in the independent distribution.
+
+**Comments on the solution:**
+
+1. The correlation changes based on the scoring system used, highlighting the importance of how we assign numerical values to categorical data.
+
+2. Both correlation calculations show a weak positive relationship between family income and happiness, suggesting that as income increases, there's a slight tendency for reported happiness to increase as well.
+
+3. The independent joint distribution we constructed shows what the probabilities would look like if there were no relationship between income and happiness. Comparing this to the original distribution can help us understand the actual degree of association between these variables.
+
+4. In reality, the variables are not independent (as seen from the non-zero correlations), but constructing the independent distribution provides a useful baseline for comparison.
+
+5. This exercise demonstrates how we can analyze and interpret categorical data using correlation and probability distributions, providing insights into the relationship between socioeconomic factors and subjective well-being.
