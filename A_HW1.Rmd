@@ -3,6 +3,7 @@ title: "GroupA_HW1"
 author: "S. Cattonar, L.Ricatti, M. Rizwan, D. Rosa, A. Valle"
 output: 
   pdf_document:
+    latex_engine: xelatex
     toc: true
     toc_depth: 3
 date: "2024-11-05"
