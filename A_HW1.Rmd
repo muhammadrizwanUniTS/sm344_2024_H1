@@ -107,27 +107,151 @@ $\text{var}(X - Y) = \sigma_x^2 - 2\sigma_{xy}^2 + \sigma_y^2$\
 
 
 ### Ex 3.5
-*Consider solving the matrix equation Ax = y for x, where y is a known n vector and A is a known n × n matrix...*
+(Devid)
+*Consider solving the matrix equation \( Ax = y \) for \( x \), where \( y \) is a known \( n \)-vector and \( A \) is a known \( n \times n \) matrix. The formal solution to the problem is \( x = A^{-1} y \), but it is possible to solve the equation directly, without actually forming \( A^{-1} \). This question explores this direct solution.*
+  
+  a. *First create an A, x and y satisfying Ax = y.*
+  
+    set.seed(0)
+    n <- 1000
+    A <- matrix(runif(n*n), n, n)
+    x.true <- runif(n)
+    y <- A %*% x.true
+  *The idea is to experiment with solving Ax = y for x, but with a known truth to compare the answer to.*
+  
+  b. *Using solve, form the matrix A−1 explicitly and then form x1 = A^(-1)y.*
+     *Note how long this takes. Also assess the mean absolute difference*
+     *between x1 and x.true (the approximate mean absolute ‘error’ in the solution).*
+  
+  c. *Now use solve to directly solve for x without forming A^(-1). Note how long this takes and assess the mean       absolute error of the result.*
+  
+  d. *What do you conclude?*
+  
+  
+  
+  **Solution**
+```{r solve_method, echo=TRUE}
+    set.seed(0)
+    n <- 1000
+    
+    # Part (a): Generate A, x.true, and y
+    A <- matrix(runif(n * n), n, n)
+    x.true <- runif(n)
+    y <- A %*% x.true
+    
+    # Part (b): Solve by forming A^-1 explicitly
+    start_time_1 <- Sys.time()
+    A_inv <- solve(A)
+    x1 <- A_inv %*% y
+    end_time_1 <- Sys.time()
+    
+    time_taken_1 <- end_time_1 - start_time_1
+    error_1 <- mean(abs(x1 - x.true))
+    
+    # Part (c): Solve directly without forming A^-1
+    start_time_2 <- Sys.time()
+    x2 <- solve(A, y)
+    end_time_2 <- Sys.time()
+    
+    time_taken_2 <- end_time_2 - start_time_2
+    error_2 <- mean(abs(x2 - x.true))
+    
+    # Part (d): Print results and conclusions
+    cat("Results:\n")
+    cat("1. Using explicit inverse (A^-1 * y):\n")
+    cat("   Time taken:", time_taken_1, "\n")
+    cat("   Mean absolute error:", error_1, "\n\n")
+    
+    cat("2. Using direct solve (solve(A, y)):\n")
+    cat("   Time taken:", time_taken_2, "\n")
 
-**Solution**
+```
 
 
-
+*Directly solving (solve(A, y)) is faster than forming the inverse and also has comparable accuracy.*
+  
 ### Ex 3.6
-*The empirical cumulative distribution function for a set of measurements {xi : i = 1, . . . n} is ...*
+(Devid)
+*The empirical cumulative distribution function (ECDF) for a set of measurements \({x_i : i = 1, \ldots, n}\) is*
+
+\[
+\hat{F}(x) = \frac{\#\{x_i < x\}}{n}
+\]
+
+*where \(\#\{x_i < x\}\) denotes the number of \(x_i\) values that are less than \(x\).*
+*When answering the following, try to ensure that your code is commented, clearly*
+*structured, and tested. To test your code, generate random samples using*
+*rnorm, runif, etc.*
+        
+  a.  *Write an R function that takes an unordered vector of observations x and returns the values of the empirical c.d.f. for each value, in the order corresponding to the original x vector. See ?sort.int.*
+        
+  b. *Modify your function to take an extra argument plot.cdf, that when TRUE will cause the empirical c.d.f. to be plotted as a step function over a suitable x range.*
+      
 **Solution**
 
-
+```{r ecdf, echo=TRUE}
+  compute_ecdf <- function(x, plot.cdf = FALSE) {
+    n <- length(x)
+    sorted_x <- sort(x)
+    ecdf_values <- cumsum(table(cut(x, breaks = c(-Inf, sorted_x)))) / n
+          
+    # Match ECDF values back to the original order of x
+    ecdf_original_order <- ecdf_values[order(order(x))]
+          
+    # Part (b)
+    if (plot.cdf) {
+      plot(sort(x), ecdf_values, type = "s", col = "green", lwd = 2, xlab = "x", ylab = "ECDF", main = "ECDF")
+          }
+    return(ecdf_original_order)
+  }
+        
+  # Testing the function
+  set.seed(18)
+  x <- rnorm(100)
+        
+  ecdf_values <- compute_ecdf(x)
+  print(ecdf_values)
+        
+  # Compute the ECDF with plotting
+  compute_ecdf(x, plot.cdf = TRUE)
+```
 
 ## FSDS - Chapter 2
-
+        
 ### Ex 2.8
-(Luca)
-*Each time a person shops at a grocery store, the event of catching a cold or some other virus from another shopper is independent from visit to visit and has a constant probability over the year, equal to 0.01. (a) In 100 trips to this store over the course of a year, the probability of catching a virus while shopping there is 100(0.01) = 1.0. What is wrong with this reasoning? (b) Find the correct probability in (a).*
+(Devid)
+*Each time a person shops at a grocery store, the event of catching a cold or some other virus from another shopper is independent from visit to visit and has a constant probability over the year, equal to 0.01.*
 
+  (a) *In 100 trips to this store over the course of a year, the probability of catching a virus while                  shopping there is 100(0.01) = 1.0. What is wrong with this reasoning?*
+  (b) *Find the correct probability in (a).*
+          
 **Solution**
+          
+### a)
+*The algorithm followed to compute the probability isn't correct. In fact, if we suppose to compute the same probability for 200 days, we will obtain a value of 2.0, but probability functions are defined in \( \Omega \rightarrow [0, 1] \).*
 
-Add comments to the solution.
+### b)
+
+*The event of getting a cold at the supermarket in a single day can be described by a Bernoulli random variable:*
+\[
+X \sim \text{Be}(0.01)
+\]
+
+*The event of getting a cold at the supermarket over 100 days can be described by a Binomial random variable:*
+\[
+X \sim \text{Bin}(100, 0.01)
+\]
+
+*The probability of getting a virus, denoted \( P_v \), is given by:*
+\[
+P_v = 1 - P(X = 0)
+\]
+
+*This can be calculated as:*
+\[
+P_v = 1 - P(X = 0) = 1 - \binom{100}{0} \cdot (0.01)^0 \cdot (1 - 0.01)^{100 - 0} \approx 0.6339677
+\]
+
 
 
 
@@ -296,29 +420,221 @@ Add comments to the solution.
 
 
 ### Ex 2.52
-The pdf $f$ of a $N(\mu, \sigma^2)$ distribution can be derived from the standard normal pdf $\phi$ shown in equation $(2.9)$. (a) Show that the normal cdf $F$ relates to the standard normal cdf $\Phi$ by $F(y) = \Phi[(y - \mu)/\sigma]$. (b) From (a), show that $f(y) = (1/\sigma)\phi[(y - \mu)/\sigma]$, and show this is equation $(2.8)$.
+(Devid)
+*The pdf $f$ of a $N(\mu, \sigma^2)$ distribution can be derived from the standard normal pdf $\phi$ shown in equation $(2.9)$. (a) Show that the normal cdf $F$ relates to the standard normal cdf $\Phi$ by $F(y) = \Phi[(y - \mu)/\sigma]$. (b) From (a), show that $f(y) = (1/\sigma)\phi[(y - \mu)/\sigma]$, and show this is equation $(2.8)$.*
 
 **Solution**
 
-Add comments to the solution.
+#### a)
+*The cdf $F$ of a normal distribution $N(\mu, \sigma^2)$ is defined as:* 
 
+\[
+F(y) = P(Y \leq y) =\int_{-\infty}^{y} f(t) \, dt
+\]
+*where $f$ is the pdf of $N(\mu, \sigma^2)$*
+
+*To express $F(y)$ in terms of the standard normal cdf $\Phi$, we can standardize the variable $Y$ to convert it to the std normal form*
+\[
+Z = \frac{Y - \mu}{\sigma} \sim N(0, 1)
+\]
+
+
+\[
+F(y) = P(Y \leq y) = P\left(\frac{Y - \mu}{\sigma} \leq \frac{y - \mu}{\sigma}\right) 
+\]
+*Since $Z = \frac{Y - \mu}{\sigma} \sim N(0, 1)$, the probability $P(Z \leq \frac{y - \mu}{\sigma})$, is the definition of the std normal cdf $\Phi$*
+\[
+F(y) = \Phi\left(\frac{y - \mu}{\sigma}\right) 
+\]
+
+#### b)
+*The pdf $f(y)$ is the derivative of the cdf $F(y)$*
+\[
+f(y) = \frac{d}{dy}F(y)
+\]
+*From (a) we know*
+\[
+F(y) = \Phi\left(\frac{y - \mu}{\sigma}\right) 
+\]
+*Differentiate $F(y)$ with respect to $y$*
+\[
+f(y) = \frac{d}{dy}\Phi\left(\frac{y - \mu}{\sigma}\right) = \Phi'\left(\frac{y - \mu}{\sigma}\right) \frac{1}{\sigma}
+\]
+*Sixnce $\Phi'(z) = \phi(z)$, where $\phi(z)$ is the std normal pdf, we have:*
+\[
+f(y) = \phi\left(\frac{y - \mu}{\sigma}\right) \frac{1}{\sigma}
+\]
 
 
 ### Ex 2.53
+(Devid)
 *If $Y$ is a standard normal random variable, with cdf $\Phi$, what is the probability distribution of $X = \Phi(Y)$? Illustrate by randomly generating a million standard normal random variables, applying the cdf function $\Phi()$ to each, and plotting histograms of the (a) $y$ values, (b) $x$ values.*
 
 **Solution**
 
-Add comments to the solution.
+$Y$ is a standard normal variable, $Y \sim N(0,1)$
+The cdf of a standard normal variable, $\Phi(y) = P(Y \leq y)$, gives the probability that Y takes on a value less than or equal to y
+By defininig $X = \Phi(Y)$, we're transforming Y by it's own cdf, so X take values in [0,1]
+Since Y is std normal, and so is a continuos random variable
+\[
+F_X = P(X \leq x) = P(F_Y(Y) \leq x)
+\]
+
+We have to notice that $F_Y(Y) \leq x$ iff $Y \leq F_Y^{-1}(x)$, thus
+\[
+F_X = P(Y \leq F_Y^{-1}(x)) = F_Y(F_Y^{-1}(x)) = x
+\]
+
+This shows that the cdf of $X$ is $F_X(x) = x$, which is the cdf of a $U(0,1)$
+
+
+```{r}
+set.seed(18)
+n_samples <- 1e6
+Y <- rnorm(n_samples)
+
+X <- pnorm(Y)
+
+if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  install.packages("ggplot2")
+}
+library(ggplot2)
+
+ggplot(data.frame(Y), aes(x = Y)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 100, fill = "skyblue", color = "black") +
+  ggtitle("Histogram of Y (Standard Normal)") +
+  xlab("y") +
+  ylab("Density")
+
+ggplot(data.frame(X), aes(x = X)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 100, fill = "salmon", color = "black") +
+  ggtitle("Histogram of X = Phi(Y) (Uniform on [0, 1])") +
+  xlab("x") +
+  ylab("Density")
+
+```
+
 
 
 ### Ex 2.70
-*The beta distribution is a probability distribution over (0, 1) that is often used in applications for which the random variable is a proportion. The beta pdf is ...*
+(Devid)
+*The beta distribution is a probability distribution over (0, 1) that is often used in applications for which the random variable is a proportion. The beta pdf is*
+\[
+f(y;\alpha,\beta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}y^{\alpha-1}(1-y)^{\beta-1}, 0\leq y \leq 1,
+\]
+*for parameters $\alpha$ and $\beta$, where $\Gamma()$ denotes the gamma function.*
+
+*(a) Show that the uniform distribution is the special case $\alpha = \beta = 1$*
+
+*(b) show that $\mu = E(Y) = \alpha/\alpha + \beta$*
+
+*(c) Find $E(Y^2)$. Show that var$(Y) = \alpha\beta/(\alpha+\beta)^2(\alpha+\beta+1) = \mu(1-\mu)/(\alpha+\beta+1)$. For fixed $\alpha + \beta$, note that var$(Y)$ decreases as $\mu$ approaches 0 or 1.*
+
+*(d) Using a function such as dbeta in R, plot the beta pdf for (i) $\alpha = \beta = 0.5, 1.0,10,100$,(ii) some values of $\alpha$ > $\beta$ and some values of $\alpha$ < $\beta$. Describe the impact of α and β on the shape and spread.*
 
 **Solution**
 
-Add comments to the solution.
+#### a)
 
+*The assumption will be proof by the moment generating function $E(e^{tx}) = \int_{0}^{1}e^{tx}f(x;\alpha,\beta)dx$*
+
+\[
+f(y;1,1) = \frac{\Gamma(2)}{\Gamma(1)\Gamma(1)}y^{0}(1-y)^{0} = 1
+\]
+
+\[
+E(e^{tx}) = \int_{0}^{1}e^{tx}f(x;1,1)dx = \frac{e^t-1}{t} = \frac{e^{tb}-e^{ta}}{t(b-a)} , b=1, a=0
+\]
+
+*But $\frac{e^{tb}-e^{ta}}{t(b-a)}$ is the mgf of a $U(0,1)$*
+
+#### b) 
+\[
+\mu = E(Y) = \int_{-\infty}^{+\infty} y \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}y^{\alpha-1}(1-y)^{\beta-1}dy = \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}\int_{-\infty}^{+\infty} y^{\alpha}(1-y)^{\beta-1}dy =
+\]
+*We can notice that the solution of the integral is as a combination of Gamma function*
+\[
+= \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)} \frac{\Gamma(\alpha+1)\Gamma(\beta)}{\Gamma(\alpha+\beta+1)} = 
+\]
+*Remembering that $\Gamma(\alpha+1) = \alpha\Gamma(\alpha)$*
+\[
+= \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)} \frac{\alpha\Gamma(\alpha)}{(\alpha+\beta)\Gamma(\alpha+\beta)} = \frac{\alpha}{\alpha+\beta}
+\]
+
+#### c)
+
+*We start computing $E(Y^2)$*
+\[
+E(Y^2) = \int_{-\infty}^{+\infty} y^2 \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}y^{\alpha-1}(1-y)^{\beta-1}dy = \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}\int_{-\infty}^{+\infty} y^{\alpha+1}(1-y)^{\beta-1}dy =
+\]
+\[
+= \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)} \frac{\Gamma(\alpha+2)\Gamma(\beta)}{\Gamma(\alpha+\beta+2)} =  \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)} \frac{\alpha(\alpha+1)\Gamma(\alpha)}{(\alpha+\beta)(\alpha+\beta+1)\Gamma(\alpha+\beta)} = 
+\]
+\[
+= \frac{\alpha(\alpha+1)}{(\alpha+\beta)(\alpha+\beta+1)}
+\]
+
+*Using the equality $var(Y) = E(Y^2)-E(Y)^2$*
+\[
+E(Y^2)-E(Y)^2 = \frac{\alpha(\alpha+1)}{(\alpha+\beta)(\alpha+\beta+1)} \left(\frac{\alpha}{\alpha+\beta}\right)^2 =  
+\]
+\[
+= \frac{(\alpha^2+\alpha)(\alpha+\beta) - \alpha^2(\alpha+\beta+1)}{(\alpha+\beta)^2(\alpha+\beta+1)} =
+\]
+\[
+= \frac{\alpha^3+\alpha^2\beta+\alpha^2+\alpha\beta - \alpha^3-\alpha^2\beta-\alpha^2}{(\alpha+\beta)^2(\alpha+\beta+1)} = 
+\]
+\[
+=\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}
+\]
+*We can write this result as $\frac{\alpha}{\alpha+\beta}\left(1-\frac{\alpha}{\alpha+\beta}\right)\frac{1}{(\alpha+\beta+1)} = \frac{\alpha}{\alpha+\beta}\frac{\beta}{\alpha+\beta}\frac{1}{(\alpha+\beta+1)}$*
+
+*Then, $var(Y) = \frac{\mu(1-\mu)}{(\alpha+\beta)^2(\alpha+\beta+1)}$*
+
+#### d)
+
+```{r}
+par(mfrow = c(2, 2))
+y <- seq(0, 1, length.out = 100)
+
+
+plot(y, dbeta(y, 0.5, 0.5), type = "l", col = "blue", main = "Beta(0.5, 0.5)",
+     ylab = "Density", xlab = "y")
+
+plot(y, dbeta(y, 1, 1), type = "l", col = "green", main = "Beta(1, 1)",
+     ylab = "Density", xlab = "y")
+
+plot(y, dbeta(y, 10, 10), type = "l", col = "purple", main = "Beta(10, 10)",
+     ylab = "Density", xlab = "y")
+
+plot(y, dbeta(y, 100, 100), type = "l", col = "red", main = "Beta(100, 100)",
+     ylab = "Density", xlab = "y")
+
+par(mfrow = c(2, 2))
+
+plot(y, dbeta(y, 2, 5), type = "l", col = "orange", main = "Beta(2, 5)",
+     ylab = "Density", xlab = "y")
+
+plot(y, dbeta(y, 5, 2), type = "l", col = "brown", main = "Beta(5, 2)",
+     ylab = "Density", xlab = "y")
+
+plot(y, dbeta(y, 10, 3), type = "l", col = "pink", main = "Beta(10, 3)",
+     ylab = "Density", xlab = "y")
+
+plot(y, dbeta(y, 3, 10), type = "l", col = "cyan", main = "Beta(3, 10)",
+     ylab = "Density", xlab = "y")
+
+```
+
+*Interpretation of the coefficients:*
+
+  - *$\alpha=\beta = 0.5$ the distribution has a U-shape, with higher density near 0 and 1*
+  - *$\alpha=\beta = 1$ is the Uniform distribution*
+  - *$\alpha=\beta > 1$ the distribution becomes more peaked around the center*
+
+  - *$\alpha > \beta$ the distribution skews toward 1, with higher density on the right side of the interval*
+  - *$\alpha < \beta$ the distribution skews toward 0, with higher density on the left side of the interval*
+  
 
 
 ## FSDS - Chapter 3 
